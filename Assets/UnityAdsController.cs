@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 
 
-public class UnityAdsController : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener
+public class UnityAdsController : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener, IUnityAdsInitializationListener
 {
 #if UNITY_IOS
     private string unity_app_id="4356944";
@@ -16,7 +16,8 @@ public class UnityAdsController : MonoBehaviour, IUnityAdsLoadListener, IUnityAd
  
     public void Init()
     {
-        Advertisement.Initialize(unity_app_id,false);
+        Initialize();
+
         this.LoadAd();
     }
  
@@ -57,4 +58,19 @@ public class UnityAdsController : MonoBehaviour, IUnityAdsLoadListener, IUnityAd
     public void OnUnityAdsShowStart(string _adUnitId) { }
     public void OnUnityAdsShowClick(string _adUnitId) { }
     public void OnUnityAdsShowComplete(string _adUnitId, UnityAdsShowCompletionState showCompletionState) { }
+
+    public void Initialize()
+    {
+                   Advertisement.Initialize(unity_app_id,false, this);
+            }
+
+            public void OnInitializationComplete()
+             {
+                   // Do something
+             }
+
+             public void OnInitializationFailed(UnityAdsInitializationError error, string message)
+             {
+                  // Do Something
+             }
 }
