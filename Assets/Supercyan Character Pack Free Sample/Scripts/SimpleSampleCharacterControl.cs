@@ -113,6 +113,8 @@ public class SimpleSampleCharacterControl : MonoBehaviour
         }
         if (m_collisions.Count == 0) { m_isGrounded = false; }
 
+        m_rigidBody.linearVelocity = Vector3.down * 100;
+
     }
 
     IEnumerator resetRotation(Vector3 target){
@@ -128,6 +130,8 @@ public class SimpleSampleCharacterControl : MonoBehaviour
         {
             m_jumpInput = true;
         }
+
+        DirectUpdate();
     }
 
 
@@ -136,22 +140,25 @@ public class SimpleSampleCharacterControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        if(PlayerLive.alive == 1){
+
+        if (PlayerLive.alive == 1)
+        {
             m_animator.SetBool("Grounded", true);
 
-            
+
         }
-        else if(PlayerLive.alive == 2){
+        else if (PlayerLive.alive == 2)
+        {
             m_animator.SetBool("Grounded", true);
 
-            if(!IsInvoking(nameof(comeIn))){
+            if (!IsInvoking(nameof(comeIn)))
+            {
                 Invoke(nameof(comeIn), 2f);
             }
-            
+
         }
 
-        DirectUpdate();
+        //DirectUpdate();
 
         // switch (m_controlMode)
         // {
@@ -240,7 +247,8 @@ public class SimpleSampleCharacterControl : MonoBehaviour
             m_currentDirection = Vector3.Slerp(m_currentDirection, direction, Time.deltaTime * m_interpolation);
 
             transform.rotation = Quaternion.LookRotation(m_currentDirection);
-            transform.position += m_currentDirection * m_moveSpeed * Time.deltaTime;
+            //transform.position += m_currentDirection * m_moveSpeed * Time.deltaTime;
+            m_rigidBody.MovePosition(transform.position + m_currentDirection * m_moveSpeed * Time.deltaTime);
 
             m_animator.SetFloat("MoveSpeed", direction.magnitude);
         }
